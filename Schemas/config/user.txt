@@ -1,0 +1,18 @@
+-- Table: public.user
+
+-- DROP TABLE IF EXISTS public."user";
+
+CREATE TABLE IF NOT EXISTS public."user"
+(
+    id_user integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+    full_name character varying(60) COLLATE pg_catalog."default" NOT NULL,
+    email character varying(60) COLLATE pg_catalog."default" NOT NULL,
+    password character varying(30) COLLATE pg_catalog."default" NOT NULL,
+    phone_number character varying(30) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT user_pkey PRIMARY KEY (id_user)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."user"
+    OWNER to postgres;

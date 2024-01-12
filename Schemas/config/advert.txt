@@ -1,0 +1,41 @@
+-- Table: public.advert
+
+-- DROP TABLE IF EXISTS public.advert;
+
+CREATE TABLE IF NOT EXISTS public.advert
+(
+    id_advert integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+    name character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    seller integer NOT NULL,
+    city integer NOT NULL,
+    data character varying COLLATE pg_catalog."default",
+    type integer NOT NULL,
+    category integer NOT NULL,
+    image character varying COLLATE pg_catalog."default",
+    date date NOT NULL,
+    price integer NOT NULL,
+    status boolean NOT NULL,
+    CONSTRAINT advert_pkey PRIMARY KEY (id_advert),
+    CONSTRAINT category_fkey FOREIGN KEY (category)
+        REFERENCES public.category (id_category) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT city_fkey FOREIGN KEY (city)
+        REFERENCES public.city (id_city) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT seller_fkey FOREIGN KEY (seller)
+        REFERENCES public."user" (id_user) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT type_fkey FOREIGN KEY (type)
+        REFERENCES public.type (id_type) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT check_price CHECK (price >= 0)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.advert
+    OWNER to postgres;
