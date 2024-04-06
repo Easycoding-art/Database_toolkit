@@ -1,15 +1,15 @@
 from faker import Faker
 import random
 import wikipedia
-def GetFakeData(data_types, n) :
-    fake = Faker("ru_RU")
+def GetFakeData(data_types, language, n) :
+    fake = Faker(language)
     result = {}
-    if 'name' in data_types :
+    if 'full_name' in data_types :
         arr1 = [fake.name() for i in range(n)]
-        result = result | {'Name' : arr1}
+        result = result | {'Full_Name' : arr1}
     if 'phone_number' in data_types :
         arr2 = [fake.phone_number() for i in range(n)]
-        result = result | {'Phone_number' : arr2}
+        result = result | {'Phone_Number' : arr2}
     if 'email' in data_types :
         arr3 = [fake.ascii_free_email() for i in range(n)]
         result = result | {'Email' : arr3}
@@ -22,6 +22,21 @@ def GetFakeData(data_types, n) :
     if 'password' in data_types :
         arr6 = [fake.password(length = random.randint(10,20)) for i in range(n)]
         result = result | {'Password' : arr6}
+    if 'first_name' in data_types :
+        arr7 = [fake.first_name() for i in range(n)]
+        result = result | {'First_Name' : arr7}
+    if 'last_name' in data_types :
+        arr8 = [fake.last_name() for i in range(n)]
+        result = result | {'Last_Name' : arr8}
+    if 'job' in data_types :
+        arr9 = [fake.job() for i in range(n)]
+        result = result | {'Job' : arr9}
+    if 'website' in data_types :
+        arr10 = [fake.hostname() for i in range(n)]
+        result = result | {'Website' : arr10}
+    if 'company' in data_types :
+        arr11 = [fake.company() for i in range(n)]
+        result = result | {'Company' : arr11}
     return result
 
 def GetRandomText(n, *patterns) :

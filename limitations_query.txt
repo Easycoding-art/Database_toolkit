@@ -1,0 +1,11 @@
+CREATE OR REPLACE FUNCTION process_table_audit() RETURNS TRIGGER AS $table_audit$
+    BEGIN
+        IF (TG_OP = 'INSERT') THEN
+            INSERT INTO time SELECT now();
+            RETURN NEW;
+        END IF;
+        RETURN NULL;
+    END;
+$table_audit$ LANGUAGE plpgsql;
+
+tables_audit
