@@ -6,7 +6,8 @@ setup(
 	description='A sample Python package', 
 	author='John Doe', 
 	author_email='jdoe@example.com',
-    scripts=['db.py', 'fake_data.py'],  
+    scripts=['db.py', 'fake_data.py'],
+    py_modules=[], 
 	install_requires=[ 
 		'psycopg2', 
 		'pandas',

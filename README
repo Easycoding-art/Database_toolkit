@@ -1,7 +1,7 @@
 Данная библиотека позволяет создавать базы данных(в том числе и темпоральные) на базе
 СУБД PostgreSQL.
 Для успешной работы библиотеки нужно:
-1. Установить PostgreSQL по [ссылке](https://www.postgresql.org/download/)
+1. Установить PostgreSQL: https://www.postgresql.org/download/
 
 2. Установить библиотеку для создания БД:
     pip install git+https://github.com/Easycoding-art/Database_toolkit.git
