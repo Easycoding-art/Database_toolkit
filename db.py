@@ -2,7 +2,7 @@ import psycopg2
 import os
 import parser_file as p
 import random
-from Fake_data import GetFakeData
+from fake_data import GetFakeData
 import pandas as pd
 
 class My_DB() :
