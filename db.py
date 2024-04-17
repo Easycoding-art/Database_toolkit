@@ -5,7 +5,7 @@ import random
 from fake_data import GetFakeData
 import pandas as pd
 
-class My_DB() :
+class DB_Creator() :
     def __init__(self, name, password, file_path) :
         self.__name = name
         self.__password = password

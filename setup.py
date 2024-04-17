@@ -3,9 +3,8 @@ from setuptools import setup
 setup( 
 	name='db_toolkit', 
 	version='0.1', 
-	description='A sample Python package', 
-	author='John Doe', 
-	author_email='jdoe@example.com',
+	description='Useful package to create database', 
+	author='Easycoding-Art',
     scripts=['db.py', 'fake_data.py'],
     py_modules=[], 
 	install_requires=[ 
