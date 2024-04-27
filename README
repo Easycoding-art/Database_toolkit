@@ -28,7 +28,7 @@ PostgreSQL. В [] через & пишутся отношения к столбц
 Например:
 default - COLLATE pg_catalog."default"
 not_null - NOT NULL
-inkrement - GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 )
+auto_inkrement - GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 )
 Ограничений на отступы нет.
 4. При помощи библиотеки создать БД, передав в конструктор название, пароль PostgreSQL
 и путь к файлу с описанием.

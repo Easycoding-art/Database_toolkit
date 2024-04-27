@@ -58,8 +58,13 @@ class DB_Creator() :
             table_name = table.get('table_name')
             columns =  table.get('columns')
             field_names = []
+            field_specials = {}
             for column in columns :
                 field_names.append(column.get('field_name'))
+                field_specials.update(
+                    {column.get('field_name') : column.get('field_specials')})
+            field_names = list(filter(lambda x: 'auto_inkrement' not in field_specials.get(x),
+                                      field_names))
             if auto_fill == True :
                 expected = ['first_name', 'last_name','full_name',
                             'email', 'password', 'phone_number',

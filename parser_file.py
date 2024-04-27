@@ -137,7 +137,7 @@ def get_query(parsed_command) :
         more = ' '.join(field_specials)
         more = more.replace('default', default)
         more = more.replace('not_null', not_null)
-        more = more.replace('inkrement', inkrement)
+        more = more.replace('auto_inkrement', inkrement)
         create_field = create_field + f'"{field_name}" {field_type} {more},\n'
         #more == через + дополнительные в ""
         for i in range(len(pointer_arr)) :
