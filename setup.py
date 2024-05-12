@@ -15,5 +15,5 @@ setup(
     package_data={
         'db_toolkit': ['../*.txt']
     },
-    include_package_data=False
+    include_package_data=True
 ) 
