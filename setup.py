@@ -13,7 +13,7 @@ setup(
 	],
     py_modules=["parser_file"],
     package_data={
-        '': ['words.txt', 'schema.txt', 'limitations_query.txt']
+        'db_toolkit': ['../*.txt']
     },
-    include_package_data=True
+    include_package_data=False
 ) 
