@@ -4,7 +4,7 @@ setup(
 	version='0.1', 
 	description='Useful package to create database', 
 	author='Easycoding-Art',
-    packages=find_packages()
+    packages=find_packages(),
 	install_requires=[ 
 		'psycopg2', 
 		'pandas',
