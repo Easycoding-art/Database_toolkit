@@ -10,10 +10,5 @@ setup(
 		'pandas',
         'faker',
         'wikipedia'
-	],
-    py_modules=["parser_file"],
-    package_data={
-        '': ['*.txt']
-    },
-    include_package_data=True
+	]
 ) 
