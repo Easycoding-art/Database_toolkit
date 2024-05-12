@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 setup(
     name='db_toolkit', 
-	version='0.1', 
+	version='1.0', 
 	description='Useful package to create database', 
 	author='Easycoding-Art',
     packages=find_packages(),
@@ -11,5 +11,8 @@ setup(
         'faker',
         'wikipedia'
 	],
-    py_modules=["parser_file"]
+    py_modules=["parser_file"],
+    package_data={
+        'db_toolkit': ['words.txt', 'schema.txt', 'limitations_query.txt']
+    }
 ) 
