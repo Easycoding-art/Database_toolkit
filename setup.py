@@ -12,5 +12,6 @@ setup(
         'wikipedia'
 	],
     py_modules=["parser_file"],
+    package_data= {'db_toolkit' :['*.txt']}
     include_package_data=True
 ) 
