@@ -1,6 +1,7 @@
 from faker import Faker
 import random
 import wikipedia
+import os
 def GetFakeData(data_types, language, n) :
     fake = Faker(language)
     result = {}
@@ -41,7 +42,7 @@ def GetFakeData(data_types, language, n) :
 
 def GetRandomText(n, *patterns) :
     result_arr = []
-    file = open('words.txt', 'r', encoding='utf-8')
+    file = open(f'{os.path.dirname(__file__)}/words.txt', 'r', encoding='utf-8')
     text = file.read()
     file.close()
     arr = text.split()

@@ -1,3 +1,4 @@
+import os
 def make_temporal(arr) :
     dict_arr = []
     for item in arr :
@@ -117,7 +118,7 @@ def table_priority(schema) :
     return sorted_tables
     
 def get_query(parsed_command) :
-    file = open('schema.txt', 'r')
+    file = open(f'{os.path.dirname(__file__)}/schema.txt', 'r')
     template_text = file.read()
     file.close()
     primary_field = parsed_command.get('primary_key')
@@ -158,7 +159,7 @@ def get_query(parsed_command) :
 # В <> primary key
 
 def set_limitations(schema) :
-    file = open('limitations_query.txt', 'r')
+    file = open(f'{os.path.dirname(__file__)}/limitations_query.txt', 'r')
     template_text = file.read()
     file.close()
     result = ''
