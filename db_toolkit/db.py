@@ -25,6 +25,7 @@ class DB_Creator() :
             con = psycopg2.connect(dbname=self.__name, user="postgres", password=self.__password, host="localhost")
             cur = con.cursor()
             tables_by_priority = p.table_priority(self.__schema)
+            print(tables_by_priority)
             for table in tables_by_priority :
                 query_text = p.get_query(table)
                 cur.execute(query_text)
@@ -36,6 +37,7 @@ class DB_Creator() :
             cur.close()
             con.close()
         except psycopg2.ProgrammingError as e:
+            print(e)
             print("База данных уже существует")
             cursor.close()
             conn.close()
