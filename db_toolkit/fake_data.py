@@ -49,7 +49,6 @@ def GetRandomText(n, *patterns) :
     for i in range(0, 10) :
         random.shuffle(arr)
     for k in range(n) :
-        print(k)
         word = arr[random.randint(0, len(arr))]
         try :
             wikipedia.set_lang("ru")
@@ -60,7 +59,6 @@ def GetRandomText(n, *patterns) :
             result = word
         if len(patterns) != 0 :
             if random.randint(0, 4) == 1 :
-                print('sss')
                 res_arr = result.split()
                 for patttern in patterns :
                     res_arr.insert(random.randint(0, len(res_arr)), patttern)
