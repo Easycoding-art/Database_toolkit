@@ -45,7 +45,7 @@ class DB_Creator() :
         con = psycopg2.connect(dbname=self.__name, user="postgres", password=self.__password, host="localhost")
         df = pd.read_sql(query, con)
         return df
-    def fill_fake_data(self, interval, lang = "ru_RU", auto_fill = True, **kwargs) :
+    def fill_fake_data(self, interval_dict, lang = "ru_RU", auto_fill = True, **kwargs) :
         tables = []
         ordered = p.table_priority(self.__schema)
         for table in ordered:
@@ -56,9 +56,10 @@ class DB_Creator() :
         cursor = conn.cursor()
         # данные для добавления
         for table in tables :
-            n = random.randint(interval[0], interval[1])
             table_name = table.get('table_name')
-            columns =  table.get('columns')
+            interval = interval_dict.get(table_name)
+            n = random.randint(interval[0], interval[1])
+            columns = table.get('columns')
             field_names = []
             field_specials = {}
             for column in columns :
