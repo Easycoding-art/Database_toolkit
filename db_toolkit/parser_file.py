@@ -27,9 +27,9 @@ def parse_schema(file_path) :
     text = text.replace('\t', '')
     text = text.replace(' ', '')
     text = text.replace('(', '|')
-    text = text.replace('[', '|')
+    text = text.replace('[', '|#')
     text = text.replace('<', '|')
-    text = text.replace('"', '|')
+    text = text.replace('"', '|*')
     text = text.replace(')', '')
     text = text.replace(']', '')
     text = text.replace('>', '')
@@ -54,15 +54,16 @@ def parse_schema(file_path) :
             field_name = field_arr[0]
             field_type = field_arr[1]
             pointer_arr = []
-            if len(field_arr) >= 3 :
-                field_pointer = field_arr[2].split('&')
-                for pointer in field_pointer :
-                    pointer_command = pointer.split(':')
-                    pointer_arr.append({'table_name':pointer_command[0], 
-                                        'field':pointer_command[1]})
             field_specials = []
-            if len(field_arr) >= 4 :
-                field_specials = field_arr[3].split('+') 
+            for character in field_arr[2:] :
+                if '#' in character :
+                    field_pointer = character[1:].split('&')
+                    for pointer in field_pointer :
+                        pointer_command = pointer.split(':')
+                        pointer_arr.append({'table_name':pointer_command[0], 
+                                            'field':pointer_command[1]})
+                if '*' in character and character != '*':
+                    field_specials = character[1:].split('+') 
             parsed_fields.append({'field_name':field_name, 
                                 'field_type':field_type,
                                 'field_specials':field_specials,
@@ -104,6 +105,9 @@ def table_priority(schema) :
                 if (mask.get('table_name') not in pointer_names or
                     mask.get('table_name') == pointer_mask) :
                     approved = False
+                    break
+                elif (mask.get('table_name') in pointer_names and
+                    mask.get('table_name') != pointer_mask) :
                     break
             if approved == True :
                 priority_mask.append(schema_mask[i])
