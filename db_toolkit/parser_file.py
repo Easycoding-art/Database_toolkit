@@ -146,7 +146,7 @@ def get_query(parsed_command) :
         create_field = create_field + f'"{field_name}" {field_type} {more},\n'
         #more == через + дополнительные в ""
         for i in range(len(pointer_arr)) :
-            foreign = foreign + f'''CONSTRAINT {pointer_arr[i].get('table_name')}_fkey FOREIGN KEY ({field_name})
+            foreign = foreign + f'''CONSTRAINT {pointer_arr[i].get('table_name')}_fkey FOREIGN KEY ("{field_name}")
                     REFERENCES public.{pointer_arr[i].get('table_name')} ({pointer_arr[i].get('field')}) MATCH SIMPLE
                     ON UPDATE NO ACTION
                     ON DELETE NO ACTION'''
