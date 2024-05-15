@@ -104,7 +104,6 @@ def table_priority(schema) :
             priority_names =[]
             for mask in priority_mask :
                 priority_names.append(mask.get('table_name'))
-            print(f'{pointer_names=}, {priority_names=}, {pointer_mask=}')
             if ((not set(pointer_names).issubset(priority_names)
                 and pointer_mask in priority_names)
                 or len(pointer_names) == 0) :
@@ -158,6 +157,9 @@ def get_query(parsed_command) :
         j+=1
     if foreign == '' :
             primary_key = primary_key.replace(',', '')
+    else :
+        if foreign[len(foreign)-2] == ',' :
+            foreign = foreign[:len(foreign)-2] + '\n'
     template_text = template_text.replace('table_name', table_name)
     template_text = template_text.replace('create_field', create_field)
     template_text = template_text.replace('primary_key', primary_key)
