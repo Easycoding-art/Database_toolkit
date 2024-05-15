@@ -83,6 +83,7 @@ class DB_Creator() :
             else :
                 all_data = [{field_name.title() : kwargs.get(field_name)(n)} for field_name in field_names]
             result = [tuple([all_data.get(field_name.title())[i] for field_name in field_names]) for i in range(n)]
+            field_names = [f'"{name}"' for name in field_names]
             cursor.executemany(f'INSERT INTO "{table_name}" ({", ".join(field_names)}) VALUES ({", ".join(["%s"]*len(field_names))})', result)
         conn.commit()  
         print("Данные добавлены")

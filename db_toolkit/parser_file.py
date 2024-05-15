@@ -101,14 +101,14 @@ def table_priority(schema) :
             pointer_names = schema_mask[i].get('pointer_names')
             approved = True
             pointer_mask = schema_mask[i].get('table_name')
+            priority_names =[]
             for mask in priority_mask :
-                if (mask.get('table_name') not in pointer_names or
-                    mask.get('table_name') == pointer_mask) :
-                    approved = False
-                    break
-                elif (mask.get('table_name') in pointer_names and
-                    mask.get('table_name') != pointer_mask) :
-                    break
+                priority_names.append(mask.get('table_name'))
+            print(f'{pointer_names=}, {priority_names=}, {pointer_mask=}')
+            if ((not set(pointer_names).issubset(priority_names)
+                and pointer_mask in priority_names)
+                or len(pointer_names) == 0) :
+                approved = False
             if approved == True :
                 priority_mask.append(schema_mask[i])
             i+=1
@@ -131,6 +131,7 @@ def get_query(parsed_command) :
     fields = parsed_command.get('fields')
     create_field = ''
     foreign = ''
+    j=0
     for field in fields :
         field_name = field.get('field_name') 
         field_type = field.get('field_type')
@@ -152,6 +153,9 @@ def get_query(parsed_command) :
                     ON DELETE NO ACTION'''
             if i + 1 != len(pointer_arr) :
                 foreign = foreign +',\n'
+        if j + 1 != len(fields) and len(pointer_arr) > 0:
+                foreign = foreign +',\n'
+        j+=1
     if foreign == '' :
             primary_key = primary_key.replace(',', '')
     template_text = template_text.replace('table_name', table_name)
