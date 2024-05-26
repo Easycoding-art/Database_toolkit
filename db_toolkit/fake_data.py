@@ -2,6 +2,8 @@ from faker import Faker
 import random
 import wikipedia
 import os
+from concurrent.futures import ProcessPoolExecutor
+
 def GetFakeData(data_types, language, n) :
     fake = Faker(language)
     result = {}
@@ -40,6 +42,24 @@ def GetFakeData(data_types, language, n) :
         result = result | {'Company' : arr11}
     return result
 
+def wikiparser(word, patterns) :
+    try :
+        wikipedia.set_lang("ru")
+        result = wikipedia.summary(word, sentences=random.randint(1, 3))
+    except wikipedia.exceptions.DisambiguationError :
+        result = word
+    except wikipedia.exceptions.PageError :
+        result = word
+    if len(patterns) != 0 :
+        if random.randint(0, 4) == 1 :
+            res_arr = result.split()
+            for patttern in patterns :
+                res_arr.insert(random.randint(0, len(res_arr)), patttern)
+            result = ' '.join(res_arr)
+            if 'è' in result :
+                result = word
+    return result
+
 def GetRandomText(n, *patterns) :
     result_arr = []
     file = open(f'{os.path.dirname(__file__)}/words.txt', 'r', encoding='utf-8')
@@ -48,22 +68,8 @@ def GetRandomText(n, *patterns) :
     arr = text.split()
     for i in range(0, 10) :
         random.shuffle(arr)
-    for k in range(n) :
-        word = arr[random.randint(0, len(arr))]
-        try :
-            wikipedia.set_lang("ru")
-            result = wikipedia.summary(word, sentences=random.randint(1, 3))
-        except wikipedia.exceptions.DisambiguationError :
-            result = word
-        except wikipedia.exceptions.PageError :
-            result = word
-        if len(patterns) != 0 :
-            if random.randint(0, 4) == 1 :
-                res_arr = result.split()
-                for patttern in patterns :
-                    res_arr.insert(random.randint(0, len(res_arr)), patttern)
-                result = ' '.join(res_arr)
-                if 'è' in result :
-                    result = word
-        result_arr.append(result)
-    return result_arr
+    words = random.choices(arr, k=n)
+    patterns_arr = [patterns]*n
+    with ProcessPoolExecutor() as executor:
+            result_arr = executor.map(wikiparser, words, patterns_arr)
+    return list(result_arr)

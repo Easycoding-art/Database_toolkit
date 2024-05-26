@@ -6,7 +6,7 @@ from db_toolkit.fake_data import GetFakeData
 import pandas as pd
 
 class DB_Creator() :
-    def __init__(self, name, password, file_path=None, host="localhost") :
+    def __init__(self, name, password, file_path=None, dev_mode=False, host="localhost") :
         self.__name = name
         self.__password = password
         self.__host = host
@@ -35,12 +35,20 @@ class DB_Creator() :
                     con = psycopg2.connect(dbname=self.__name, user="postgres", password=self.__password, host=self.__host)
                     cur = con.cursor()
                     tables_by_priority = p.table_priority(self.__schema)
+                    text = ''
                     for table in tables_by_priority :
                         query_text = p.get_query(table)
+                        text = text + '\n' + query_text
                         cur.execute(query_text)
                     if self.__temporal_mode == True :
                         limitations = p.set_limitations(self.__schema)
+                        text = text + '\n' + limitations
                         cur.execute(limitations)
+                    if dev_mode == True :
+                        os.mkdir(f'{self.__name}_logs.txt')                        
+                        file = open(f'{self.__name}_logs/{self.__name}_tables.txt', 'w')
+                        file.write(text)
+                        file.close()
                     print("Таблицы созданы")
                     con.commit()
                     cur.close()
