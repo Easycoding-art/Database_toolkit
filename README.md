@@ -1,7 +1,7 @@
 # Database-toolkit
 
 This library allows you to create databases (including temporal databases) based on the
-PostgreSQL database.
+PostgreSQL.
 
 ## Table of contents
 
@@ -27,6 +27,7 @@ Successful library operations require:
 
 1. In a text document, specify a database description in the following form:
 
+'''
 $temporal$
 property<property_id>{
     id(integer)[user: user_id]“not_null”,
@@ -36,6 +37,7 @@ user<user_id>{
     user_id(integer),
     password(integer)
 };
+'''
 -----------------------------------------------------------------------------------------
 $temporal$ - Indicates that the database is temporal(imposes a number of restrictions). Not
 required.
