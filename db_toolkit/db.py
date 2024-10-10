@@ -4,9 +4,12 @@ import db_toolkit.parser_file as p
 import random
 from db_toolkit.fake_data import GetFakeData
 import pandas as pd
+from eralchemy import render_er
+from graphviz import render
 
 class DB_Creator() :
-    def __init__(self, name, password, file_path=None, dev_mode=False, host="localhost") :
+    def __init__(self, name, password, file_path=None, dev_mode=False, user="postgres", host="localhost") :
+        self.__user = user
         self.__name = name
         self.__password = password
         self.__host = host
@@ -15,7 +18,7 @@ class DB_Creator() :
         else :
             self.__schema, self.__temporal_mode = p.parse_schema(file_path)
         if self.__schema != None :
-            conn = psycopg2.connect(dbname="postgres", user="postgres", password=password, host=self.__host)
+            conn = psycopg2.connect(dbname="postgres", user=self.__user, password=password, host=self.__host)
             cursor = conn.cursor()
             conn.autocommit = True
             try :
@@ -27,6 +30,24 @@ class DB_Creator() :
                 cursor.close()
                 conn.close()
             except psycopg2.ProgrammingError as e:
+                if dev_mode == True :
+                        os.mkdir(f'{self.__name}_logs')                        
+                        file = open(f'{self.__name}_logs/{self.__name}_tables.txt', 'w')
+                        file.write(text)
+                        file.close()
+                        url = f"postgresql+psycopg2://{self.__user}:{self.__password}@{self.__host}:5432/{self.__name}"
+                        render_er(url, f'{self.__name}_logs/er.gv')
+                        with open(f'{self.__name}_logs/er.gv', 'r+') as file :
+                            text = file.read()
+                            text = text.replace('[INTEGER]', '')
+                            text = text.replace('[TEXT]', '')
+                            text = text.replace('[DATE]', '')
+                            text = text.replace('NOT NULL', '')
+                            file.write(text)
+                        render('dot', 'png', f'{self.__name}_logs/er.gv') 
+                        os.rename(f'{self.__name}_logs/er.gv.png', f'{self.__name}_logs/physical_diagram.png')
+                        os.rename(f'{self.__name}_logs/er.gv.2.png', f'{self.__name}_logs/logical_diagram.png')
+                        os.remove(f'{self.__name}_logs/er.gv')
                 print("База данных уже существует")
                 cursor.close()
                 conn.close()
@@ -45,10 +66,23 @@ class DB_Creator() :
                         text = text + '\n' + limitations
                         cur.execute(limitations)
                     if dev_mode == True :
-                        os.mkdir(f'{self.__name}_logs.txt')                        
+                        os.mkdir(f'{self.__name}_logs')                        
                         file = open(f'{self.__name}_logs/{self.__name}_tables.txt', 'w')
                         file.write(text)
                         file.close()
+                        url = f"postgresql+psycopg2://{self.__user}:{self.__password}@{self.__host}:5432/{self.__name}"
+                        render_er(url, f'{self.__name}_logs/er.gv')
+                        with open(f'{self.__name}_logs/er.gv', 'r+') as file :
+                            text = file.read()
+                            text = text.replace('[INTEGER]', '')
+                            text = text.replace('[TEXT]', '')
+                            text = text.replace('[DATE]', '')
+                            text = text.replace('NOT NULL', '')
+                            file.write(text)
+                        render('dot', 'png', f'{self.__name}_logs/er.gv') 
+                        os.rename(f'{self.__name}_logs/er.gv.png', f'{self.__name}_logs/physical_diagram.png')
+                        os.rename(f'{self.__name}_logs/er.gv.2.png', f'{self.__name}_logs/logical_diagram.png')
+                        os.remove(f'{self.__name}_logs/er.gv')
                     print("Таблицы созданы")
                     con.commit()
                     cur.close()

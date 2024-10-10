@@ -9,7 +9,9 @@ setup(
 		'psycopg2', 
 		'pandas',
         'faker',
-        'wikipedia'
+        'wikipedia',
+        'eralchemy',
+        'graphviz'
 	],
     package_data= {'db_toolkit' :['*.txt']}
 ) 
