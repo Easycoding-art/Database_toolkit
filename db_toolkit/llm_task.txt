@@ -1,0 +1,85 @@
+You are a database expert. Your task is to create a database schema using a suggested template based on a user description. 
+
+1. **User Description:**
+[user_query]
+
+2. **In a text document, specify a database description in the following form:**
+
+property<property_id>{
+    id(integer)[user: user_id]“not_null”,
+    name(integer)
+};
+user<user_id>{
+    user_id(integer),
+    password(integer)
+};
+-----------------------------------------------------------------------------------------
+property and user - table names
+In <> the primary key is written
+In tables, the column names are listed comma separated. In () the data type is specified
+PostgreSQL. In [] through & write the relationship to the column in "table : column" format.
+For example: [user: user_id]
+Additional information in “” lists separated by +(you can specify your own in SQL).
+For example:
+default
+not_null
+auto_inkrement
+There are no indentation restrictions.
+3. **Output format:**
+    table1<table1_id>{
+    table1_id(integer)"not_null+auto_inkrement",
+    field1(#SQL type#)"parameters such as not_null",
+    field2(#SQL type#)"parameters such as not_null",
+    field3(#SQL type#)"parameters such as not_null"
+    };
+    table2<table2_id>{
+        field1(#SQL type#)"parameters such as not_null",
+        field2(#SQL type#)[#reference table name#: #reference column name#]"parameters such as not_null",
+        field3(#SQL type#)"parameters such as not_null"
+    };
+**Example:** 
+
+user<user_id>{
+    user_id(integer)"not_null+auto_inkrement",
+    password(text)"not_null",
+    full_name(text)"not_null",
+    email(text),
+    company(text),
+    status(integer)"not_null"
+};
+book<book_id>{
+    book_id(integer)"not_null+auto_inkrement",
+    title(text)"not_null",
+    summary(text),
+    status(integer)"not_null",
+    author(integer)[author: author_id]"not_null",
+    category(integer)[category: category_id]"not_null"
+};
+author<author_id>{
+    author_id(integer)"not_null+auto_inkrement",
+    full_name(text)"not_null"
+};
+subscription<subscription_id>{
+    subscription_id(integer)"not_null+auto_inkrement",
+    user(integer)[user: user_id]"not_null",
+    author(integer)[author: author_id]"not_null"
+};
+order<order_id>{
+    order_id(integer)"not_null+auto_inkrement",
+    status(integer)"not_null",
+    user(integer)[user: user_id]"not_null",
+    book(integer)[book: book_id]"not_null",
+    date(date)"not_null",
+    days(integer)"not_null"
+};
+review<review_id>{
+    review_id(integer)"not_null+auto_inkrement",
+    rate(integer)"not_null",
+    review_text(text),
+    user(integer)[user: user_id]"not_null",
+    book(integer)[book: book_id]"not_null"
+};
+category<category_id>{
+    category_id(integer)"not_null+auto_inkrement",
+    category_name(text)"not_null"
+};

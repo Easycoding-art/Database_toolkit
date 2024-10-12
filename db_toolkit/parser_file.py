@@ -136,17 +136,15 @@ def get_query(parsed_command) :
         field_type = field.get('field_type')
         field_specials = field.get('field_specials')
         pointer_arr = field.get('field_pointers')
-        default = 'COLLATE pg_catalog."default"'
         not_null = 'NOT NULL'
         inkrement = 'GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 )'
         more = ' '.join(field_specials)
-        more = more.replace('default', default)
+        more = more.replace('default', 'default ')
         more = more.replace('not_null', not_null)
         more = more.replace('auto_inkrement', inkrement)
         create_field = create_field + f'"{field_name}" {field_type} {more},\n'
-        #more == через + дополнительные в ""
         for i in range(len(pointer_arr)) :
-            foreign = foreign + f'''CONSTRAINT {pointer_arr[i].get('table_name')}_fkey FOREIGN KEY ("{field_name}")
+            foreign = foreign + f'''CONSTRAINT {field_name}_{pointer_arr[i].get('table_name')}_fkey FOREIGN KEY ("{field_name}")
                     REFERENCES public.{pointer_arr[i].get('table_name')} ({pointer_arr[i].get('field')}) MATCH SIMPLE
                     ON UPDATE NO ACTION
                     ON DELETE NO ACTION'''

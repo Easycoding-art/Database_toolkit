@@ -13,12 +13,13 @@ class DB_Creator() :
         self.__name = name
         self.__password = password
         self.__host = host
-        if file_path == None :
+        self.__file_path = file_path
+        if self.__file_path == None :
             self.__schema, self.__temporal_mode = None, None
         else :
             self.__schema, self.__temporal_mode = p.parse_schema(file_path)
         if self.__schema != None :
-            conn = psycopg2.connect(dbname="postgres", user=self.__user, password=password, host=self.__host)
+            conn = psycopg2.connect(dbname="postgres", user=self.__user, password=self.__password, host=self.__host)
             cursor = conn.cursor()
             conn.autocommit = True
             try :
@@ -26,15 +27,15 @@ class DB_Creator() :
                 sql = f"CREATE DATABASE {name}"
                 # выполняем код sql
                 cursor.execute(sql)
-                print("База данных успешно создана")
+                print("The database has been successfully created")
                 cursor.close()
                 conn.close()
             except psycopg2.ProgrammingError as e:
+                print("The database already exists")
+                cursor.close()
+                conn.close()
                 if dev_mode == True :
                         os.mkdir(f'{self.__name}_logs')                        
-                        file = open(f'{self.__name}_logs/{self.__name}_tables.txt', 'w')
-                        file.write(text)
-                        file.close()
                         url = f"postgresql+psycopg2://{self.__user}:{self.__password}@{self.__host}:5432/{self.__name}"
                         render_er(url, f'{self.__name}_logs/er.gv')
                         with open(f'{self.__name}_logs/er.gv', 'r+') as file :
@@ -48,12 +49,9 @@ class DB_Creator() :
                         os.rename(f'{self.__name}_logs/er.gv.png', f'{self.__name}_logs/physical_diagram.png')
                         os.rename(f'{self.__name}_logs/er.gv.2.png', f'{self.__name}_logs/logical_diagram.png')
                         os.remove(f'{self.__name}_logs/er.gv')
-                print("База данных уже существует")
-                cursor.close()
-                conn.close()
             else:
                 try :
-                    con = psycopg2.connect(dbname=self.__name, user="postgres", password=self.__password, host=self.__host)
+                    con = psycopg2.connect(dbname=self.__name, user=self.__user, password=self.__password, host=self.__host)
                     cur = con.cursor()
                     tables_by_priority = p.table_priority(self.__schema)
                     text = ''
@@ -65,6 +63,10 @@ class DB_Creator() :
                         limitations = p.set_limitations(self.__schema)
                         text = text + '\n' + limitations
                         cur.execute(limitations)
+                    print("Tables have been created")
+                    con.commit()
+                    cur.close()
+                    con.close()
                     if dev_mode == True :
                         os.mkdir(f'{self.__name}_logs')                        
                         file = open(f'{self.__name}_logs/{self.__name}_tables.txt', 'w')
@@ -83,16 +85,13 @@ class DB_Creator() :
                         os.rename(f'{self.__name}_logs/er.gv.png', f'{self.__name}_logs/physical_diagram.png')
                         os.rename(f'{self.__name}_logs/er.gv.2.png', f'{self.__name}_logs/logical_diagram.png')
                         os.remove(f'{self.__name}_logs/er.gv')
-                    print("Таблицы созданы")
-                    con.commit()
-                    cur.close()
-                    con.close()
                 except psycopg2.ProgrammingError as e:
                     print(e)
+                    print(f'The database schema is not written correctly. Please edit the file "{self.__file_path}". There should be no errors when restarting.')
                     cursor.close()
                     conn.close()
     def set_query(self, query) :
-        con = psycopg2.connect(dbname=self.__name, user="postgres", password=self.__password, host=self.__host)
+        con = psycopg2.connect(dbname=self.__name, user=self.__user, password=self.__password, host=self.__host)
         df = pd.read_sql(query, con)
         return df
     def fill_fake_data(self, interval_dict, lang = "ru_RU", auto_fill = True, **kwargs) :
@@ -103,7 +102,7 @@ class DB_Creator() :
                 t_name = table.get('name')
                 fields = table.get('fields')
                 tables.append({'table_name': t_name, 'columns' : fields})
-            conn = psycopg2.connect(dbname=self.__name, user="postgres", password=self.__password, host=self.__host)
+            conn = psycopg2.connect(dbname=self.__name, user=self.__user, password=self.__password, host=self.__host)
             cursor = conn.cursor()
             # данные для добавления
             for table in tables :
@@ -137,8 +136,19 @@ class DB_Creator() :
                 field_names = [f'"{name}"' for name in field_names]
                 cursor.executemany(f'INSERT INTO "{table_name}" ({", ".join(field_names)}) VALUES ({", ".join(["%s"]*len(field_names))})', result)
             conn.commit()  
-            print("Данные добавлены")
+            print("Data has been added")
             cursor.close()
             conn.close()
         else:
-            print("Схема не задана!")
+            print("The schemа is not set!")
+    def delete(self) :
+        conn = psycopg2.connect(dbname="postgres", user=self.__user, password=self.__password, host=self.__host)
+        cursor = conn.cursor()
+        conn.autocommit = True
+        # команда для создания базы данных
+        sql = f'DROP DATABASE IF EXISTS {self.__name}'
+        # выполняем код sql
+        cursor.execute(sql)
+        print("The database has been successfully deleted")
+        cursor.close()
+        conn.close()

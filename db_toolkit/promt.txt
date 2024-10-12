@@ -1,0 +1,19 @@
+Write a promt template to create a database description on the specified topic using the following information.
+
+**Title:** Database Description for [Topic]
+
+**1. Overview:**
+   [Overview]
+
+**2. Data Model:**
+   - Describe the fundamental structure of the database. What type of database is it (relational, NoSQL, etc.)? 
+   - Include information about key entities (tables, collections) and their relationships.
+   - Example: "The database employs a [relational/NoSQL] model featuring entities such as [Entity 1], [Entity 2], etc., which are related through [explain relationships, e.g., foreign keys, documents, etc.]."
+
+**3. Key Entities and Attributes:**
+   - List the primary entities within the database and outline their attributes. 
+   - Example: 
+     - **Entity 1:** [Name]
+       - Attributes: [Attribute 1, Attribute 2, Attribute 3]
+     - **Entity 2:** [Name]
+       - Attributes: [Attribute 1, Attribute 2, Attribute 3]

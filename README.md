@@ -16,9 +16,11 @@ PostgreSQL.
 Successful library operations require:
 1. [Install PostgreSQL](https://www.postgresql.org/download/)
 
-2. [Install GraphViz](https://www.graphviz.org/download/)
+2. [Install GraphViz](https://www.graphviz.org/download/)(Optional)
 
-3. Install the library for creating the database
+3. [Register at Hugging Face](https://huggingface.co/) and get API key(Optional)
+
+4. Install the library for creating the database
     ```sh
     pip install git+https://github.com/Easycoding-art/Database_toolkit.git
     ```
@@ -46,7 +48,7 @@ In <> the primary key is written
 In tables, the column names are listed comma separated. In () the data type is specified
 PostgreSQL. In [] through & write the relationship to the column in “table : column" format. Additional information in “” lists separated by +(you can specify your own in SQL).
 For example:
-default - COLLATE pg_catalog. “default”
+default - DEFAULT
 not_null - NOT NULL
 auto_inkrement - GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 )
 There are no indentation restrictions.
@@ -65,6 +67,17 @@ Texts in Russian are created by the GetRandomText function.
 
 4. set_query returns a dataframe with the result in response to an SQL query.
 
+5. Alternatively, use the LLM assistant to create the database as in the example.
+    ```sh
+    import db_toolkit
+    key = "hf_key"
+    name = 'Social Network'
+    description = 'The "Social Network" database is designed to manage and facilitate user interactions within an online platform.'
+    agent = db_toolkit.LLMAssistant(key, name, description)
+    agent.set_db('my_password', dev_mode=True)
+    ```
+
 ## TODO list
 
-- [ ] Add creation of database schemas from user's description using LLM
+- [X] Add creation of database schemas from user's description using LLM
+- [ ] Add data generation from user's description using LLM

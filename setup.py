@@ -11,7 +11,8 @@ setup(
         'faker',
         'wikipedia',
         'eralchemy',
-        'graphviz'
+        'graphviz',
+        'huggingface_hub'
 	],
     package_data= {'db_toolkit' :['*.txt']}
 ) 
