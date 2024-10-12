@@ -90,6 +90,7 @@ class DB_Creator() :
                     print(f'The database schema is not written correctly. Please edit the file "{self.__file_path}". There should be no errors when restarting.')
                     cursor.close()
                     conn.close()
+                    self.delete()
     def set_query(self, query) :
         con = psycopg2.connect(dbname=self.__name, user=self.__user, password=self.__password, host=self.__host)
         df = pd.read_sql(query, con)

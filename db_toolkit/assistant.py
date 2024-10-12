@@ -1,6 +1,6 @@
 from huggingface_hub import InferenceClient
 import os
-import db
+import db_toolkit.db as db
 
 class LLMAssistant() :
 	def __init__(self, key, name, description) :
