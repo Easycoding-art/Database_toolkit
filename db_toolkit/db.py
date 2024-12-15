@@ -79,6 +79,7 @@ class DB_Creator() :
                             text = text.replace('[INTEGER]', '')
                             text = text.replace('[TEXT]', '')
                             text = text.replace('[DATE]', '')
+                            text = text.replace('[TIMESTAMP]', '')
                             text = text.replace('NOT NULL', '')
                             file.write(text)
                         render('dot', 'png', f'{self.__name}_logs/er.gv') 
@@ -88,8 +89,8 @@ class DB_Creator() :
                 except psycopg2.ProgrammingError as e:
                     print(e)
                     print(f'The database schema is not written correctly. Please edit the file "{self.__file_path}". There should be no errors when restarting.')
-                    cursor.close()
-                    conn.close()
+                    cur.close()
+                    con.close()
                     self.delete()
     def set_query(self, query) :
         con = psycopg2.connect(dbname=self.__name, user=self.__user, password=self.__password, host=self.__host)
